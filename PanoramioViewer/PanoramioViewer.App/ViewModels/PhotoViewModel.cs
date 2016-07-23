@@ -5,7 +5,6 @@ namespace PanoramioViewer.App.ViewModels
 {
 	public class PhotoViewModel : BaseViewModel
 	{
-		private const string OriginalPhotoUrlFormat = "http://static.panoramio.com/photos/original/{0}.jpg";
 		public PhotoViewModel(PhotoInfo photoInfo)
 		{
 			Height = photoInfo.Height;
@@ -36,7 +35,6 @@ namespace PanoramioViewer.App.ViewModels
 		public string UploadDate { get; }
 		public int Width { get; }
 		public BitmapImage Image { get; }
-
-		public string OriginalPhotoFileUrl => string.Format(OriginalPhotoUrlFormat, PhotoId);
+		public bool IsLoading => Image == null && string.IsNullOrEmpty(PhotoFileUrl);
 	}
 }

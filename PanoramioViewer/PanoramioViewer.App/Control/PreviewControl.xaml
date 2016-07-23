@@ -1,0 +1,71 @@
+﻿<UserControl
+	x:Class="PanoramioViewer.App.Control.PreviewControl"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:PanoramioViewer.App.Control"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+	xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
+	mc:Ignorable="d"
+	x:Name="Dialog">
+
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+		<interactivity:Interaction.Behaviors>
+			<core:EventTriggerBehavior EventName="Loaded">
+				<core:InvokeCommandAction Command="{Binding ElementName=Dialog, Path=ViewModel.OnPreviewLoaded}"></core:InvokeCommandAction>
+			</core:EventTriggerBehavior>
+		</interactivity:Interaction.Behaviors>
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition Width="360"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+
+		<Grid Grid.Column="0">
+			<StackPanel Height="{Binding ElementName=Dialog, Path=ViewModel.PreviewImageHeight}" Width="{Binding ElementName=Dialog, Path=ViewModel.PreviewImageWidth}">
+				<StackPanel.Background>
+					<ImageBrush ImageSource="{Binding ElementName=Dialog, Path=ViewModel.Image}" Stretch="UniformToFill"></ImageBrush>
+				</StackPanel.Background>
+			</StackPanel>
+			<Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="100">
+				<ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="{Binding ElementName=Dialog, Path=ViewModel.IsDownloading}"/>
+			</Viewbox>
+		</Grid>
+
+		<Grid Grid.Column="1">
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="*"></RowDefinition>
+			</Grid.RowDefinitions>
+
+			<Grid HorizontalAlignment="Stretch" Margin="10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"></ColumnDefinition>
+					<ColumnDefinition ></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"></RowDefinition>
+					<RowDefinition Height="Auto"></RowDefinition>
+					<RowDefinition Height="Auto"></RowDefinition>
+				</Grid.RowDefinitions>
+
+				<TextBlock Grid.Row="0" Grid.Column="0" Text="Profile Name:" Margin="0,0,5,0"></TextBlock>
+				<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ElementName=Dialog, Path=ViewModel.OwnerName}"></TextBlock>
+
+				<TextBlock Grid.Row="1" Grid.Column="0" Text="Photo Title:"></TextBlock>
+				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ElementName=Dialog, Path=ViewModel.PhotoTitle}" TextWrapping="Wrap"></TextBlock>
+
+				<TextBlock Grid.Row="2" Grid.Column="0" Text="Upload Date:"></TextBlock>
+				<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ElementName=Dialog, Path=ViewModel.UploadDate}" TextWrapping="Wrap"></TextBlock>
+
+			</Grid>
+
+			<maps:MapControl Grid.Row="1"></maps:MapControl>
+		</Grid>
+
+	</Grid>
+</UserControl>

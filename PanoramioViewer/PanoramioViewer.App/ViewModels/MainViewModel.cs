@@ -19,6 +19,7 @@ namespace PanoramioViewer.App.ViewModels
 		}
 
 		public ObservableCollection<PhotoViewModel> Images { get; }
+		public IPanoramioService PanoramioService => _panoramioService;
 
 		public DelegateCommand OnMapClickCommand => new DelegateCommand(async args =>
 		{
@@ -26,10 +27,10 @@ namespace PanoramioViewer.App.ViewModels
 			if (mapArgs == null)
 				return;
 
-			var data = await _panoramioService.GetPhotosMetadataAsync();
+			var data = await _panoramioService.GetPhotosMetadataAsync(mapArgs.Location.Position.Latitude, mapArgs.Location.Position.Longitude);
 
 			Images.Clear();
-		
+
 			var tasks = _panoramioService.GetBitmapImageCollectionAsync(data).ToList();
 			while (tasks.Count > 0)
 			{

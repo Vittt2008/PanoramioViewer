@@ -110,8 +110,11 @@
     <Compile Include="Entity\MapLocation.cs" />
     <Compile Include="Entity\PhotoInfo.cs" />
     <Compile Include="Entity\PhotoResponse.cs" />
+    <Compile Include="Entity\RadiousPoint.cs" />
+    <Compile Include="Helper\ResolutionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceImpl\PanoramioService.cs" />
+    <Compile Include="ServiceImpl\UrlLoggerHandler.cs" />
     <Compile Include="Service\IPanoramioService.cs" />
     <Compile Include="Service\IPanoramioServiceInternal.cs" />
     <EmbeddedResource Include="Properties\PanoramioViewer.Logic.rd.xml" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
@@ -20,12 +21,16 @@ namespace PanoramioViewer.Logic.ServiceImpl
 
 		public PanoramioService()
 		{
-			_panoramioService = RestService.For<IPanoramioServiceInternal>(PanaromioApiServerName);
+			_panoramioService = RestService.For<IPanoramioServiceInternal>(new HttpClient(new UrlLoggerHandler())
+			{
+				BaseAddress = new Uri(PanaromioApiServerName)
+			});
 		}
 
-		public Task<PhotoResponse> GetPhotosMetadataAsync()
+		public Task<PhotoResponse> GetPhotosMetadataAsync(double lat, double lon)
 		{
-			return _panoramioService.GetPhotosMetadataAsync();
+			var point = new RadiousPoint(lat, lon);
+			return _panoramioService.GetPhotosMetadataAsync(point.MinX, point.MinY, point.MaxX, point.MaxY);
 		}
 
 		public IEnumerable<Task<PhotoInfo>> GetBitmapImageCollectionAsync(PhotoResponse response)

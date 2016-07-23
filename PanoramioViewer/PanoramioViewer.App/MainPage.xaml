@@ -25,7 +25,7 @@
 			</interactivity:Interaction.Behaviors>
 		</Maps:MapControl>
 
-		<GridView Grid.Column="1" ItemsSource="{Binding ElementName=Page, Path=ViewModel.Images}" >
+		<GridView x:Name="PhotoGridView" Grid.Column="1" ItemsSource="{Binding ElementName=Page, Path=ViewModel.Images}" SelectionChanged="GridView_SelectionChanged" >
 			<!--ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollMode="Disabled"-->
 			<!--<GridView.ItemsPanel>
 				<ItemsPanelTemplate>

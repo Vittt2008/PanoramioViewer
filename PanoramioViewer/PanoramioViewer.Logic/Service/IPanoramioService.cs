@@ -5,10 +5,11 @@ using PanoramioViewer.Logic.Entity;
 
 namespace PanoramioViewer.Logic.Service
 {
-	public interface IPanoramioService : IPanoramioServiceInternal
+	public interface IPanoramioService
 	{
 		Task<PhotoInfo> FillImageAsync(PhotoInfo photoInfo);
 		Task<BitmapImage> GetImageFromUrlAsync(string url);
 		IEnumerable<Task<PhotoInfo>> GetBitmapImageCollectionAsync(PhotoResponse response);
+		Task<PhotoResponse> GetPhotosMetadataAsync(double lat, double lon);
 	}
 }
