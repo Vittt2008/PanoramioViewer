@@ -64,7 +64,7 @@
 
 			</Grid>
 
-			<maps:MapControl Grid.Row="1"></maps:MapControl>
+			<maps:MapControl x:Name="MapControl" Grid.Row="1"></maps:MapControl>
 		</Grid>
 
 	</Grid>

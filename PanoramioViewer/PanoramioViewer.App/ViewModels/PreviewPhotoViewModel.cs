@@ -1,4 +1,7 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.Devices.Geolocation;
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Media.Imaging;
 using PanoramioViewer.Logic.Helper;
 using PanoramioViewer.Logic.Service;
@@ -94,6 +97,17 @@ namespace PanoramioViewer.App.ViewModels
 				OnPropertyChanged(nameof(IsDownloading));
 			}
 		}
+
+		public MapIcon MapElement => new MapIcon
+		{
+			Location = new Geopoint(new BasicGeoposition
+			{
+				Latitude = Lat,
+				Longitude = Long
+			}),
+			Title = $"Lat {Lat}\nLong {Long}",
+			NormalizedAnchorPoint = new Point(0.5, 1.0)
+		};
 
 		public DelegateCommand OnPreviewLoaded => new DelegateCommand(async args =>
 		{

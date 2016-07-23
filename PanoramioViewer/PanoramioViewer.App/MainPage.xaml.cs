@@ -37,32 +37,45 @@ namespace PanoramioViewer.App
 
 		public MainViewModel ViewModel => DataContext as MainViewModel;
 
-		private void GridView_ItemClick(object sender, ItemClickEventArgs e)
-		{
-
-		}
-
 		private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var photoViewModel = PhotoGridView.SelectedItem as PhotoViewModel;
+			if (photoViewModel == null)
+				return;
+
 			//var control = new PreviewControl { DataContext = new PreviewPhotoViewModel(photoViewModel, ViewModel.PanoramioService) };
 			var control = new PreviewControl(photoViewModel, ViewModel.PanoramioService);
 
-
-			StackPanel stackPanel = new StackPanel();
-			stackPanel.Children.Add(control);
-
-			Border border = new Border
+			var stackPanel = new StackPanel { Children = { control } };
+			var border = new Border
 			{
 				Child = stackPanel,
-				//Background = Resources["ApplicationPageBackgroundThemeBrush"] as SolidColorBrush,
+				BorderThickness = new Thickness(1),
+				BorderBrush = Resources["ApplicationForegroundThemeBrush"] as SolidColorBrush
 			};
-
-			Popup popup = new Popup
+			var popup = new Popup
 			{
 				Child = border,
 				IsLightDismissEnabled = true,
-				IsOpen = true
+				IsOpen = true,
+				HorizontalAlignment = HorizontalAlignment.Center,
+				VerticalAlignment = VerticalAlignment.Center
+			};
+
+			popup.LayoutUpdated += (o, args) =>
+			{
+				double actualHorizontalOffset = popup.HorizontalOffset;
+				double actualVerticalOffset = popup.VerticalOffset;
+
+				double newHorizontalOffset = (Window.Current.Bounds.Width - border.ActualWidth) / 2;
+				double newVerticalOffset = (Window.Current.Bounds.Height - border.ActualHeight) / 2;
+
+				if (Math.Abs(actualHorizontalOffset - newHorizontalOffset) > 10E-6 ||
+					Math.Abs(actualVerticalOffset - newVerticalOffset) > 10E-6)
+				{
+					popup.HorizontalOffset = newHorizontalOffset;
+					popup.VerticalOffset = newVerticalOffset;
+				}
 			};
 		}
 	}
