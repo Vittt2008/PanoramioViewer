@@ -29,9 +29,14 @@ namespace PanoramioViewer.App
 	/// </summary>
 	public sealed partial class MainPage : Page
 	{
+		private readonly PreviewControl _previewControl;
+		private readonly Popup _popup;
+
 		public MainPage()
 		{
 			InitializeComponent();
+			_previewControl = new PreviewControl();
+			_popup = CreatePopup(_previewControl);
 			DataContext = new MainViewModel(new PanoramioService());
 		}
 
@@ -43,10 +48,13 @@ namespace PanoramioViewer.App
 			if (photoViewModel == null)
 				return;
 
-			//var control = new PreviewControl { DataContext = new PreviewPhotoViewModel(photoViewModel, ViewModel.PanoramioService) };
-			var control = new PreviewControl(photoViewModel, ViewModel.PanoramioService);
+			_previewControl.ViewModel = new PreviewPhotoViewModel(photoViewModel, ViewModel.PanoramioService);
+			_popup.IsOpen = true;
+		}
 
-			var stackPanel = new StackPanel { Children = { control } };
+		private Popup CreatePopup(PreviewControl previewControl)
+		{
+			var stackPanel = new StackPanel { Children = { previewControl } };
 			var border = new Border
 			{
 				Child = stackPanel,
@@ -57,7 +65,6 @@ namespace PanoramioViewer.App
 			{
 				Child = border,
 				IsLightDismissEnabled = true,
-				IsOpen = true,
 				HorizontalAlignment = HorizontalAlignment.Center,
 				VerticalAlignment = VerticalAlignment.Center
 			};
@@ -77,6 +84,8 @@ namespace PanoramioViewer.App
 					popup.VerticalOffset = newVerticalOffset;
 				}
 			};
+
+			return popup;
 		}
 	}
 }

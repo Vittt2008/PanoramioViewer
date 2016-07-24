@@ -13,11 +13,11 @@
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-		<interactivity:Interaction.Behaviors>
+		<!--<interactivity:Interaction.Behaviors>
 			<core:EventTriggerBehavior EventName="Loaded">
 				<core:InvokeCommandAction Command="{Binding ElementName=Dialog, Path=ViewModel.OnPreviewLoaded}"></core:InvokeCommandAction>
 			</core:EventTriggerBehavior>
-		</interactivity:Interaction.Behaviors>
+		</interactivity:Interaction.Behaviors>-->
 
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition></ColumnDefinition>

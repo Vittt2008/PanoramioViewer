@@ -7,6 +7,7 @@
 	xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
 	xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+	xmlns:control="using:PanoramioViewer.App.Control"
 	x:Class="PanoramioViewer.App.MainPage"
 	mc:Ignorable="d"
 	x:Name="Page">

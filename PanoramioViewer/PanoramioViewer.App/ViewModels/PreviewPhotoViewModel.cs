@@ -17,6 +17,8 @@ namespace PanoramioViewer.App.ViewModels
 		private readonly IPanoramioService _panoramioService;
 		private BitmapImage _image;
 		private bool _isDownloading;
+		private int _previewImageHeight;
+		private int _previewImageWidth;
 
 		public PreviewPhotoViewModel(PhotoViewModel photoViewModel, IPanoramioService panoramioService)
 		{
@@ -57,8 +59,31 @@ namespace PanoramioViewer.App.ViewModels
 			}
 		}
 
-		public int PreviewImageHeight { get; private set; }
-		public int PreviewImageWidth { get; private set; }
+		public int PreviewImageHeight
+		{
+			get { return _previewImageHeight; }
+			private set
+			{
+				if (_previewImageHeight == value)
+					return;
+
+				_previewImageHeight = value;
+				OnPropertyChanged(nameof(PreviewImageHeight));
+			}
+		}
+
+		public int PreviewImageWidth
+		{
+			get { return _previewImageWidth; }
+			private set
+			{
+				if (_previewImageWidth == value)
+					return;
+
+				_previewImageWidth = value;
+				OnPropertyChanged(nameof(PreviewImageWidth));
+			}
+		}
 
 		public double Lat { get; }
 		public double Long { get; }
@@ -90,8 +115,8 @@ namespace PanoramioViewer.App.ViewModels
 			get { return _isDownloading; }
 			private set
 			{
-				//if (_isDownloading == value)
-				//	return;
+				if (_isDownloading == value)
+					return;
 
 				_isDownloading = value;
 				OnPropertyChanged(nameof(IsDownloading));
