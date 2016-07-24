@@ -45,7 +45,7 @@ namespace PanoramioViewer.App
 		private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var photoViewModel = PhotoGridView.SelectedItem as PhotoViewModel;
-			if (photoViewModel == null)
+			if (photoViewModel == null || photoViewModel.IsLoading)
 				return;
 
 			_previewControl.ViewModel = new PreviewPhotoViewModel(photoViewModel, ViewModel.PanoramioService);

@@ -18,7 +18,12 @@
 			<ColumnDefinition Width="1*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 
-		<Maps:MapControl Grid.Column="0">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition></RowDefinition>
+		</Grid.RowDefinitions>
+
+		<Maps:MapControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
 			<interactivity:Interaction.Behaviors>
 				<core:EventTriggerBehavior EventName="MapTapped">
 					<core:InvokeCommandAction Command="{Binding ElementName=Page, Path=ViewModel.OnMapClickCommand}"></core:InvokeCommandAction>
@@ -26,9 +31,9 @@
 			</interactivity:Interaction.Behaviors>
 		</Maps:MapControl>
 
-		<GridView x:Name="PhotoGridView" Grid.Column="1" ItemsSource="{Binding ElementName=Page, Path=ViewModel.Images}" SelectionChanged="GridView_SelectionChanged" >
-			<!--ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollMode="Disabled"-->
-			<!--<GridView.ItemsPanel>
+		<GridView x:Name="PhotoGridView" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ElementName=Page, Path=ViewModel.Images}" SelectionChanged="GridView_SelectionChanged" >
+			<!--ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollMode="Disabled"
+			<GridView.ItemsPanel>
 				<ItemsPanelTemplate>
 					<VirtualizingStackPanel Orientation="Horizontal"></VirtualizingStackPanel>
 				</ItemsPanelTemplate>
@@ -43,9 +48,34 @@
 							<TextBlock Text="{Binding OwnerName}"></TextBlock>
 							<TextBlock Text="{Binding PhotoTitle}" TextWrapping="Wrap"></TextBlock>
 						</StackPanel>
+						<Viewbox VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="50">
+							<ProgressRing IsActive="{Binding IsLoading}"></ProgressRing>
+						</Viewbox>
 					</Grid>
 				</DataTemplate>
 			</GridView.ItemTemplate>
 		</GridView>
+
+		<StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" Margin="5">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"></ColumnDefinition>
+					<ColumnDefinition></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+				</Grid.RowDefinitions>
+
+				<TextBlock Grid.Row="0" Grid.Column="0" Text="Lat: "></TextBlock>
+				<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ElementName=Page, Path=ViewModel.Lat}"></TextBlock>
+				<TextBlock Grid.Row="1" Grid.Column="0" Text="Long:" Margin="0,0,5,0"></TextBlock>
+				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ElementName=Page, Path=ViewModel.Long}"></TextBlock>
+				<TextBlock Grid.Row="2" Grid.Column="0" Text="Image Count:" Margin="0,0,5,0"></TextBlock>
+				<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ElementName=Page, Path=ViewModel.Images.ImageCount}"></TextBlock>
+			</Grid>
+		</StackPanel>
 	</Grid>
 </Page>

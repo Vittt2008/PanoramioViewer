@@ -22,6 +22,15 @@ namespace PanoramioViewer.App.ViewModels
 			Image = photoInfo.Image;
 		}
 
+		private PhotoViewModel()
+		{
+		}
+
+		public static PhotoViewModel CreateLoadingViewModel()
+		{
+			return new PhotoViewModel();
+		}
+
 		public int Height { get; }
 		public double Lat { get; }
 		public double Long { get; }

@@ -10,6 +10,6 @@ namespace PanoramioViewer.Logic.Service
 		Task<PhotoInfo> FillImageAsync(PhotoInfo photoInfo);
 		Task<BitmapImage> GetImageFromUrlAsync(string url);
 		IEnumerable<Task<PhotoInfo>> GetBitmapImageCollectionAsync(PhotoResponse response);
-		Task<PhotoResponse> GetPhotosMetadataAsync(double lat, double lon);
+		Task<PhotoResponse> GetPhotosMetadataAsync(int from, int to, double lat, double lon);
 	}
 }

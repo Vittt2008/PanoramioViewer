@@ -6,7 +6,7 @@ namespace PanoramioViewer.Logic.Service
 {
 	public interface IPanoramioServiceInternal
 	{
-		[Get("/get_panoramas.php?set=public&from=0&to=20&size=medium&mapfilter=true")]
-		Task<PhotoResponse> GetPhotosMetadataAsync(string minx, string miny, string maxx, string maxy);
+		[Get("/get_panoramas.php?set=public&size=medium&mapfilter=true")]
+		Task<PhotoResponse> GetPhotosMetadataAsync(int from, int to, string minx, string miny, string maxx, string maxy);
 	}
 }

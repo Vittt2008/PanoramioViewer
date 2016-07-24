@@ -110,6 +110,7 @@
     <Compile Include="ViewModels\DelegateCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PhotoViewModel.cs" />
+    <Compile Include="ViewModels\PhotoViewModelCollection.cs" />
     <Compile Include="ViewModels\PreviewPhotoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Media.Imaging;
@@ -11,15 +12,57 @@ namespace PanoramioViewer.App.ViewModels
 	public class MainViewModel : BaseViewModel
 	{
 		private readonly IPanoramioService _panoramioService;
+		private CancellationTokenSource _tokenSource;
+		private PhotoViewModelCollection _images;
+		private double _lat;
+		private double _long;
 
 		public MainViewModel(IPanoramioService panoramioService)
 		{
 			_panoramioService = panoramioService;
-			Images = new ObservableCollection<PhotoViewModel>();
+			_tokenSource = new CancellationTokenSource();
 		}
 
-		public ObservableCollection<PhotoViewModel> Images { get; }
 		public IPanoramioService PanoramioService => _panoramioService;
+
+		public PhotoViewModelCollection Images
+		{
+			get { return _images; }
+			private set
+			{
+				if (_images == value)
+					return;
+
+				_images = value;
+				OnPropertyChanged(nameof(Images));
+			}
+		}
+
+		public double Lat
+		{
+			get { return _lat; }
+			private set
+			{
+				if (_lat == value)
+					return;
+
+				_lat = value;
+				OnPropertyChanged(nameof(Lat));
+			}
+		}
+
+		public double Long
+		{
+			get { return _long; }
+			private set
+			{
+				if (_long == value)
+					return;
+
+				_long = value;
+				OnPropertyChanged(nameof(Long));
+			}
+		}
 
 		public DelegateCommand OnMapClickCommand => new DelegateCommand(async args =>
 		{
@@ -27,18 +70,12 @@ namespace PanoramioViewer.App.ViewModels
 			if (mapArgs == null)
 				return;
 
-			var data = await _panoramioService.GetPhotosMetadataAsync(mapArgs.Location.Position.Latitude, mapArgs.Location.Position.Longitude);
+			Lat = mapArgs.Location.Position.Latitude;
+			Long = mapArgs.Location.Position.Longitude;
 
-			Images.Clear();
-
-			var tasks = _panoramioService.GetBitmapImageCollectionAsync(data).ToList();
-			while (tasks.Count > 0)
-			{
-				var task = await Task.WhenAny(tasks);
-				tasks.Remove(task);
-				var photo = await task;
-				Images.Add(new PhotoViewModel(photo));
-			}
+			Images?.CancelLoadMoreItemsOperation();
+			Images = new PhotoViewModelCollection(mapArgs.Location.Position, _panoramioService);
+			await Images.LoadDataAsync();
 		});
 	}
 }

@@ -27,10 +27,10 @@ namespace PanoramioViewer.Logic.ServiceImpl
 			});
 		}
 
-		public Task<PhotoResponse> GetPhotosMetadataAsync(double lat, double lon)
+		public Task<PhotoResponse> GetPhotosMetadataAsync(int from, int to, double lat, double lon)
 		{
 			var point = new RadiousPoint(lat, lon);
-			return _panoramioService.GetPhotosMetadataAsync(point.MinX, point.MinY, point.MaxX, point.MaxY);
+			return _panoramioService.GetPhotosMetadataAsync(from, to, point.MinX, point.MinY, point.MaxX, point.MaxY);
 		}
 
 		public IEnumerable<Task<PhotoInfo>> GetBitmapImageCollectionAsync(PhotoResponse response)
