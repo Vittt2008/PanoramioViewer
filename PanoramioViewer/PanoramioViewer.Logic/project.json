@@ -1,7 +1,9 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
-    "refit": "2.4.1"
+    "refit": "2.4.1",
+    "WinRTXamlToolkit.UWP": "2.0.0",
+    "WriteableBitmapEx": "1.5.0"
   },
   "frameworks": {
     "uap10.0": {}

@@ -111,6 +111,7 @@
     <Compile Include="Entity\PhotoInfo.cs" />
     <Compile Include="Entity\PhotoResponse.cs" />
     <Compile Include="Entity\RadiousPoint.cs" />
+    <Compile Include="Helper\BitmapHelper.cs" />
     <Compile Include="Helper\ResolutionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceImpl\PanoramioService.cs" />
@@ -118,6 +119,11 @@
     <Compile Include="Service\IPanoramioService.cs" />
     <Compile Include="Service\IPanoramioServiceInternal.cs" />
     <EmbeddedResource Include="Properties\PanoramioViewer.Logic.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="WinRTXamlToolkit">
+      <HintPath>C:\Users\Виталий\.nuget\packages\WinRTXamlToolkit.UWP\2.0.0\lib\uap10.0\WinRTXamlToolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
