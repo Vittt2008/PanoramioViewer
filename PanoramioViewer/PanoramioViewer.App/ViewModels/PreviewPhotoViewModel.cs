@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Media.Imaging;
+using NotificationsExtensions;
+using NotificationsExtensions.Toasts;
 using PanoramioViewer.Logic.Helper;
 using PanoramioViewer.Logic.Service;
 
@@ -152,10 +157,21 @@ namespace PanoramioViewer.App.ViewModels
 
 		public DelegateCommand OnSaveCommand => new DelegateCommand(async args =>
 		{
-			var saverPiker = CreateJpegFileSavePicker();
-			var storageFile = await saverPiker.PickSaveFileAsync();
-			await storageFile.SavePhotoFromUrl(OriginalPhotoFileUrl);
-			//await Image.SaveToStorageFileAsJpeg(storageFile);
+			StorageFile storageFile = null;
+			try
+			{
+				var saverPiker = CreateJpegFileSavePicker();
+				storageFile = await saverPiker.PickSaveFileAsync();
+				if (storageFile == null)
+					return;
+				await storageFile.SavePhotoFromUrl(OriginalPhotoFileUrl);
+				//await Image.SaveToStorageFileAsJpeg(storageFile);
+				ShowSuccessfulToast(storageFile);
+			}
+			catch (Exception ex)
+			{
+				ShowErrorToast(storageFile, ex.Message);
+			}
 		});
 
 		private void OnDataRequested(DataTransferManager sender, DataRequestedEventArgs args)
@@ -172,6 +188,81 @@ namespace PanoramioViewer.App.ViewModels
 			saverPiker.DefaultFileExtension = ".jpg";
 			saverPiker.SuggestedFileName = $"{PhotoTitle}.jpg";
 			return saverPiker;
+		}
+
+		private void ShowSuccessfulToast(StorageFile file)
+		{
+			ToastContent content = new ToastContent()
+			{
+				Visual = new ToastVisual
+				{
+					BindingGeneric = new ToastBindingGeneric
+					{
+						AppLogoOverride = new ToastGenericAppLogo
+						{
+							Source = file.Path,
+							HintCrop = ToastGenericAppLogoCrop.Default,
+						},
+						Children =
+						{
+							new AdaptiveText { Text = file.Name },
+							new AdaptiveText { Text = "File was saved to disk." },
+							new AdaptiveText { Text = file.Path },
+							//new AdaptiveImage{ Source = file.Path }
+						},
+					},
+				},
+				Audio = new ToastAudio()
+				{
+					Src = new Uri("ms-winsoundevent:Notification.IM")
+				},
+				/*Actions = new ToastActionsCustom
+				{
+					Buttons =
+					{
+						new ToastButton("Open File", "OpenFile")
+						{
+							ActivationType = ToastActivationType.Background,
+							ImageUri = file.Path,
+							TextBoxId = "tbOpenFile"
+						}
+					},
+				}*/
+			};
+
+			ShowToast(content);
+		}
+
+		private void ShowErrorToast(StorageFile file, string message)
+		{
+			ToastContent content = new ToastContent()
+			{
+				Visual = new ToastVisual
+				{
+					BindingGeneric = new ToastBindingGeneric
+					{
+						Children =
+						{
+							new AdaptiveText { Text = "An error occurred while saving the file." },
+							new AdaptiveText { Text = message },
+							new AdaptiveText { Text = file?.Path },
+						},
+					},
+				},
+				Audio = new ToastAudio()
+				{
+					Src = new Uri("ms-winsoundevent:Notification.IM")
+				},
+			};
+
+			ShowToast(content);
+		}
+
+		private static void ShowToast(ToastContent content)
+		{
+			var doc = content.GetXml();
+			var toast = new ToastNotification(doc);
+			ToastNotificationManager.CreateToastNotifier().Show(toast);
 		}
 	}
 }

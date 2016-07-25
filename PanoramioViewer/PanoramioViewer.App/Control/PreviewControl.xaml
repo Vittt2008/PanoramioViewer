@@ -73,21 +73,27 @@
 					<ColumnDefinition></ColumnDefinition>
 				</Grid.ColumnDefinitions>
 
-				<Button  Grid.Column="0" Content="Share" HorizontalAlignment="Stretch">
+				<AppBarButton Label="Share" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+					<AppBarButton.Icon>
+						<FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;"/>
+					</AppBarButton.Icon>
 					<interactivity:Interaction.Behaviors>
 						<core:EventTriggerBehavior EventName="Click">
 							<core:InvokeCommandAction Command="{Binding ElementName=Dialog, Path=ViewModel.OnShareCommand}"></core:InvokeCommandAction>
 						</core:EventTriggerBehavior>
 					</interactivity:Interaction.Behaviors>
-				</Button>
+				</AppBarButton>
 
-				<Button  Grid.Column="1" Content="Save" HorizontalAlignment="Stretch">
+				<AppBarButton  Grid.Column="1" Label="Save" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<AppBarButton.Icon>
+						<FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#57605;"/>
+					</AppBarButton.Icon>
 					<interactivity:Interaction.Behaviors>
 						<core:EventTriggerBehavior EventName="Click">
 							<core:InvokeCommandAction Command="{Binding ElementName=Dialog, Path=ViewModel.OnSaveCommand}"></core:InvokeCommandAction>
 						</core:EventTriggerBehavior>
 					</interactivity:Interaction.Behaviors>
-				</Button>
+				</AppBarButton>
 
 			</Grid>
 
