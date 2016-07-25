@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Media.Imaging;
 using PanoramioViewer.Logic.Service;
@@ -16,6 +17,8 @@ namespace PanoramioViewer.App.ViewModels
 		private PhotoViewModelCollection _images;
 		private double _lat;
 		private double _long;
+		private PreviewPhotoViewModel _previewPhoto;
+		private bool _isPreviewOpen;
 
 		public MainViewModel(IPanoramioService panoramioService)
 		{
@@ -64,6 +67,32 @@ namespace PanoramioViewer.App.ViewModels
 			}
 		}
 
+		public PreviewPhotoViewModel PreviewPhoto
+		{
+			get { return _previewPhoto; }
+			set
+			{
+				if (_previewPhoto == value)
+					return;
+
+				_previewPhoto = value;
+				OnPropertyChanged(nameof(PreviewPhoto));
+			}
+		}
+
+		public bool IsPreviewOpen
+		{
+			get { return _isPreviewOpen; }
+			set
+			{
+				if (_isPreviewOpen == value)
+					return;
+
+				_isPreviewOpen = value;
+				OnPropertyChanged(nameof(IsPreviewOpen));
+			}
+		}
+
 		public DelegateCommand OnMapClickCommand => new DelegateCommand(async args =>
 		{
 			var mapArgs = args as MapInputEventArgs;
@@ -76,6 +105,16 @@ namespace PanoramioViewer.App.ViewModels
 			Images?.CancelLoadMoreItemsOperation();
 			Images = new PhotoViewModelCollection(mapArgs.Location.Position, _panoramioService);
 			await Images.LoadDataAsync();
+		});
+
+		public DelegateCommand OnItemClick => new DelegateCommand(args =>
+		{
+			var eventArgs = args as ItemClickEventArgs;
+			var photoViewModel = eventArgs?.ClickedItem as PhotoViewModel;
+			if (photoViewModel == null)
+				return;
+			PreviewPhoto = new PreviewPhotoViewModel(photoViewModel, PanoramioService);
+			IsPreviewOpen = true;
 		});
 	}
 }

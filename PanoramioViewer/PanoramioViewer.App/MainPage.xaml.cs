@@ -29,63 +29,28 @@ namespace PanoramioViewer.App
 	/// </summary>
 	public sealed partial class MainPage : Page
 	{
-		private readonly PreviewControl _previewControl;
-		private readonly Popup _popup;
-
 		public MainPage()
 		{
 			InitializeComponent();
-			_previewControl = new PreviewControl();
-			_popup = CreatePopup(_previewControl);
 			DataContext = new MainViewModel(new PanoramioService());
 		}
 
 		public MainViewModel ViewModel => DataContext as MainViewModel;
 
-		private void GridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void PreviewPopupOnLayoutUpdated(object sender, object e)
 		{
-			var photoViewModel = PhotoGridView.SelectedItem as PhotoViewModel;
-			if (photoViewModel == null || photoViewModel.IsLoading)
-				return;
+			double actualHorizontalOffset = PreviewPopup.HorizontalOffset;
+			double actualVerticalOffset = PreviewPopup.VerticalOffset;
 
-			_previewControl.ViewModel = new PreviewPhotoViewModel(photoViewModel, ViewModel.PanoramioService);
-			_popup.IsOpen = true;
-		}
+			double newHorizontalOffset = (Window.Current.Bounds.Width - PreviewBorder.ActualWidth) / 2;
+			double newVerticalOffset = (Window.Current.Bounds.Height - PreviewBorder.ActualHeight) / 2;
 
-		private Popup CreatePopup(PreviewControl previewControl)
-		{
-			var stackPanel = new StackPanel { Children = { previewControl } };
-			var border = new Border
+			if (Math.Abs(actualHorizontalOffset - newHorizontalOffset) > 10E-6 ||
+				Math.Abs(actualVerticalOffset - newVerticalOffset) > 10E-6)
 			{
-				Child = stackPanel,
-				BorderThickness = new Thickness(1),
-				BorderBrush = Resources["ApplicationForegroundThemeBrush"] as SolidColorBrush
-			};
-			var popup = new Popup
-			{
-				Child = border,
-				IsLightDismissEnabled = true,
-				HorizontalAlignment = HorizontalAlignment.Center,
-				VerticalAlignment = VerticalAlignment.Center
-			};
-
-			popup.LayoutUpdated += (o, args) =>
-			{
-				double actualHorizontalOffset = popup.HorizontalOffset;
-				double actualVerticalOffset = popup.VerticalOffset;
-
-				double newHorizontalOffset = (Window.Current.Bounds.Width - border.ActualWidth) / 2;
-				double newVerticalOffset = (Window.Current.Bounds.Height - border.ActualHeight) / 2;
-
-				if (Math.Abs(actualHorizontalOffset - newHorizontalOffset) > 10E-6 ||
-					Math.Abs(actualVerticalOffset - newVerticalOffset) > 10E-6)
-				{
-					popup.HorizontalOffset = newHorizontalOffset;
-					popup.VerticalOffset = newVerticalOffset;
-				}
-			};
-
-			return popup;
+				PreviewPopup.HorizontalOffset = newHorizontalOffset;
+				PreviewPopup.VerticalOffset = newVerticalOffset;
+			}
 		}
 	}
 }

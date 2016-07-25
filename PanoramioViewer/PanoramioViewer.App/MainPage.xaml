@@ -31,13 +31,18 @@
 			</interactivity:Interaction.Behaviors>
 		</Maps:MapControl>
 
-		<GridView x:Name="PhotoGridView" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ElementName=Page, Path=ViewModel.Images}" SelectionChanged="GridView_SelectionChanged" >
+		<GridView x:Name="PhotoGridView" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ElementName=Page, Path=ViewModel.Images}" IsItemClickEnabled="True">
 			<!--ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollMode="Disabled"
 			<GridView.ItemsPanel>
 				<ItemsPanelTemplate>
 					<VirtualizingStackPanel Orientation="Horizontal"></VirtualizingStackPanel>
 				</ItemsPanelTemplate>
 			</GridView.ItemsPanel>-->
+			<interactivity:Interaction.Behaviors>
+				<core:EventTriggerBehavior EventName="ItemClick">
+					<core:InvokeCommandAction Command="{Binding ElementName=Page, Path=ViewModel.OnItemClick}"></core:InvokeCommandAction>
+				</core:EventTriggerBehavior>
+			</interactivity:Interaction.Behaviors>
 			<GridView.ItemTemplate>
 				<DataTemplate>
 					<Grid Width="384" MinHeight="288">
@@ -77,5 +82,12 @@
 				<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ElementName=Page, Path=ViewModel.Images.ImageCount}"></TextBlock>
 			</Grid>
 		</StackPanel>
+
+		<Popup x:Name="PreviewPopup" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2" IsOpen="{Binding ElementName=Page, Path=ViewModel.IsPreviewOpen, Mode=TwoWay}" IsLightDismissEnabled="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LayoutUpdated="PreviewPopupOnLayoutUpdated">
+			<Border x:Name="PreviewBorder"  BorderThickness="1" BorderBrush="{StaticResource ApplicationForegroundThemeBrush}">
+				<control:PreviewControl ViewModel="{Binding ElementName=Page, Path=ViewModel.PreviewPhoto}"/>
+			</Border>
+		</Popup>
+
 	</Grid>
 </Page>
