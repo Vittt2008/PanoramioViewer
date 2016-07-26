@@ -1,0 +1,14 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:PanoramioViewer.App">
+
+	<Style x:Key="HeaderTextBlock" TargetType="TextBlock">
+		<Setter Property="FontSize" Value="22"></Setter>
+	</Style>
+
+	<Style x:Key="TitleTextBlock" TargetType="TextBlock">
+		<Setter Property="FontSize" Value="18"></Setter>
+	</Style>
+	
+</ResourceDictionary>

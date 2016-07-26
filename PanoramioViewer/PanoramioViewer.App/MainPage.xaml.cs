@@ -18,6 +18,8 @@ namespace PanoramioViewer.App
 	/// </summary>
 	public sealed partial class MainPage : Page
 	{
+		private const string RedPinImage = "ms-appx:///Assets/pin_red.png";
+		private const string GreenSmalPinImage = "ms-appx:///Assets/pin_green_2.png";
 		private readonly double _zoomLevel;
 
 		public MainPage()
@@ -60,9 +62,9 @@ namespace PanoramioViewer.App
 					Latitude = args.Location.Position.Latitude,
 					Longitude = args.Location.Position.Longitude
 				}),
-				Title = $"Lat {args.Location.Position.Latitude}\nLong {args.Location.Position.Longitude}",
+				Title = $"Lat {args.Location.Position.Latitude.ToString("##.####")}\nLong {args.Location.Position.Longitude.ToString("##.####")}",
 				NormalizedAnchorPoint = new Point(0.5, 1.0),
-				Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/pin_red.png")),
+				Image = RandomAccessStreamReference.CreateFromUri(new Uri(RedPinImage)),
 				ZIndex = int.MaxValue,
 			};
 			MapControl.MapElements.Add(mapElement);
@@ -83,7 +85,7 @@ namespace PanoramioViewer.App
 					Longitude = args.Longitude
 				}),
 				NormalizedAnchorPoint = new Point(0.5, 1.0),
-				Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/pin_green_2.png"))
+				Image = RandomAccessStreamReference.CreateFromUri(new Uri(GreenSmalPinImage))
 			};
 			MapControl.MapElements.Add(mapElement);
 		}

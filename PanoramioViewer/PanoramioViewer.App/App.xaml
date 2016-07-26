@@ -5,4 +5,12 @@
 	xmlns:local="using:PanoramioViewer.App"
 	RequestedTheme="Dark">
 
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="ResourceDictionary.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
+	
 </Application>

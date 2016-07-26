@@ -59,7 +59,7 @@
 							<ImageBrush ImageSource="{Binding Image}" Stretch="UniformToFill"></ImageBrush>
 						</Grid.Background>
 						<StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Background="#80000000" Orientation="Vertical" Padding="5">
-							<TextBlock Text="{Binding OwnerName}"></TextBlock>
+							<TextBlock Text="{Binding OwnerName}" Style="{StaticResource HeaderTextBlock}"></TextBlock>
 							<TextBlock Text="{Binding PhotoTitle}" TextWrapping="Wrap"></TextBlock>
 						</StackPanel>
 						<Viewbox VerticalAlignment="Center" HorizontalAlignment="Center" Height="50" Width="50">

@@ -13,12 +13,6 @@
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-		<!--<interactivity:Interaction.Behaviors>
-			<core:EventTriggerBehavior EventName="Loaded">
-				<core:InvokeCommandAction Command="{Binding ElementName=Dialog, Path=ViewModel.OnPreviewLoaded}"></core:InvokeCommandAction>
-			</core:EventTriggerBehavior>
-		</interactivity:Interaction.Behaviors>-->
-
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition></ColumnDefinition>
 			<ColumnDefinition Width="360"></ColumnDefinition>
@@ -54,8 +48,8 @@
 					<RowDefinition Height="Auto"></RowDefinition>
 				</Grid.RowDefinitions>
 
-				<TextBlock Grid.Row="0" Grid.Column="0" Text="Profile Name:" Margin="0,0,5,0"></TextBlock>
-				<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ElementName=Dialog, Path=ViewModel.OwnerName}"></TextBlock>
+				<TextBlock Grid.Row="0" Grid.Column="0" Text="Profile Name:" Margin="0,0,5,0" Style="{StaticResource TitleTextBlock}"></TextBlock>
+				<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ElementName=Dialog, Path=ViewModel.OwnerName}" Style="{StaticResource TitleTextBlock}"></TextBlock>
 
 				<TextBlock Grid.Row="1" Grid.Column="0" Text="Photo Title:"></TextBlock>
 				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ElementName=Dialog, Path=ViewModel.PhotoTitle}" TextWrapping="Wrap"></TextBlock>

@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
-using Windows.UI.Xaml.Media.Imaging;
 using PanoramioViewer.Logic.Service;
-using PanoramioViewer.Logic.ServiceImpl;
 
 namespace PanoramioViewer.App.ViewModels
 {
@@ -130,9 +125,8 @@ namespace PanoramioViewer.App.ViewModels
 				return;
 
 			MapClickPoint = mapArgs.Position;
-			var photoViewModels = Images.Where(x => Math.Abs(x.Lat - mapElement.Location.Position.Latitude) < 10E-6 &&
-													Math.Abs(x.Long - mapElement.Location.Position.Longitude) < 10E-6).ToList();
-			var photoViewModel = photoViewModels.FirstOrDefault();
+			var photoViewModel = Images.FirstOrDefault(x => Math.Abs(x.Lat - mapElement.Location.Position.Latitude) < 10E-6 &&
+															Math.Abs(x.Long - mapElement.Location.Position.Longitude) < 10E-6);
 			if (photoViewModel == null)
 				return;
 

@@ -20,6 +20,7 @@ namespace PanoramioViewer.App.ViewModels
 	public class PreviewPhotoViewModel : BaseViewModel
 	{
 		private const string OriginalPhotoUrlFormat = "http://static.panoramio.com/photos/original/{0}.jpg";
+		private const string GreenPinImage = "ms-appx:///Assets/pin_green.png";
 		private const int InfoWidthColumn = 360;
 		private const double ScaleFactor = 0.8;
 
@@ -132,17 +133,23 @@ namespace PanoramioViewer.App.ViewModels
 			}
 		}
 
-		public MapIcon MapElement => new MapIcon
+		public MapIcon MapElement
 		{
-			Location = new Geopoint(new BasicGeoposition
+			get
 			{
-				Latitude = Lat,
-				Longitude = Long
-			}),
-			Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/pin_green.png")),
-			Title = $"Lat {Lat}\nLong {Long}",
-			NormalizedAnchorPoint = new Point(0.5, 1.0)
-		};
+				return new MapIcon
+				{
+					Location = new Geopoint(new BasicGeoposition
+					{
+						Latitude = Lat,
+						Longitude = Long
+					}),
+					Image = RandomAccessStreamReference.CreateFromUri(new Uri(GreenPinImage)),
+					Title = $"Lat {Lat.ToString("##.####")}\nLong {Long.ToString("##.####")}",
+					NormalizedAnchorPoint = new Point(0.5, 1.0)
+				};
+			}
+		}
 
 		public DelegateCommand OnPreviewLoaded => new DelegateCommand(async args =>
 		{
@@ -166,7 +173,6 @@ namespace PanoramioViewer.App.ViewModels
 				if (storageFile == null)
 					return;
 				await storageFile.SavePhotoFromUrl(OriginalPhotoFileUrl);
-				//await Image.SaveToStorageFileAsJpeg(storageFile);
 				ShowSuccessfulToast(storageFile);
 			}
 			catch (Exception ex)
@@ -209,7 +215,6 @@ namespace PanoramioViewer.App.ViewModels
 							new AdaptiveText { Text = file.Name },
 							new AdaptiveText { Text = "File was saved to disk." },
 							new AdaptiveText { Text = file.Path },
-							//new AdaptiveImage{ Source = file.Path }
 						},
 					},
 				},
@@ -217,18 +222,6 @@ namespace PanoramioViewer.App.ViewModels
 				{
 					Src = new Uri("ms-winsoundevent:Notification.IM")
 				},
-				/*Actions = new ToastActionsCustom
-				{
-					Buttons =
-					{
-						new ToastButton("Open File", "OpenFile")
-						{
-							ActivationType = ToastActivationType.Background,
-							ImageUri = file.Path,
-							TextBoxId = "tbOpenFile"
-						}
-					},
-				}*/
 			};
 
 			ShowToast(content);
