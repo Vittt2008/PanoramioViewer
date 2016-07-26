@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Media.Imaging;
@@ -14,7 +15,6 @@ namespace PanoramioViewer.App.ViewModels
 	public class MainViewModel : BaseViewModel
 	{
 		private readonly IPanoramioService _panoramioService;
-		private CancellationTokenSource _tokenSource;
 		private PhotoViewModelCollection _images;
 		private double _lat;
 		private double _long;
@@ -24,7 +24,6 @@ namespace PanoramioViewer.App.ViewModels
 		public MainViewModel(IPanoramioService panoramioService)
 		{
 			_panoramioService = panoramioService;
-			_tokenSource = new CancellationTokenSource();
 		}
 
 		public IPanoramioService PanoramioService => _panoramioService;
@@ -96,10 +95,15 @@ namespace PanoramioViewer.App.ViewModels
 			}
 		}
 
+		public Point MapClickPoint { get; private set; }
+
 		public DelegateCommand OnMapClickCommand => new DelegateCommand(async args =>
 		{
 			var mapArgs = args as MapInputEventArgs;
 			if (mapArgs == null)
+				return;
+
+			if (MapClickPoint == mapArgs.Position)
 				return;
 
 			Lat = mapArgs.Location.Position.Latitude;
@@ -115,6 +119,25 @@ namespace PanoramioViewer.App.ViewModels
 			Images.PreviewPhotoDownloaded += ImagesOnPreviewPhotoDownloaded;
 
 			await Images.LoadDataAsync();
+		});
+
+		public DelegateCommand OnMapElementClick => new DelegateCommand(args =>
+		{
+			var mapArgs = args as MapElementClickEventArgs;
+
+			var mapElement = mapArgs?.MapElements.FirstOrDefault(x => x is MapIcon) as MapIcon;
+			if (mapElement == null)
+				return;
+
+			MapClickPoint = mapArgs.Position;
+			var photoViewModels = Images.Where(x => Math.Abs(x.Lat - mapElement.Location.Position.Latitude) < 10E-6 &&
+													Math.Abs(x.Long - mapElement.Location.Position.Longitude) < 10E-6).ToList();
+			var photoViewModel = photoViewModels.FirstOrDefault();
+			if (photoViewModel == null)
+				return;
+
+			PreviewPhoto = new PreviewPhotoViewModel(photoViewModel, PanoramioService);
+			IsPreviewOpen = true;
 		});
 
 		public DelegateCommand OnItemClick => new DelegateCommand(args =>

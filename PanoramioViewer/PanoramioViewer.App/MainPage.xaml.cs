@@ -1,25 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
 using Windows.Storage.Streams;
-using Windows.UI;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using PanoramioViewer.App.Control;
+using Windows.UI.Xaml.Media.Animation;
 using PanoramioViewer.App.ViewModels;
 using PanoramioViewer.Logic.ServiceImpl;
 
@@ -32,11 +18,14 @@ namespace PanoramioViewer.App
 	/// </summary>
 	public sealed partial class MainPage : Page
 	{
+		private readonly double _zoomLevel;
+
 		public MainPage()
 		{
 			InitializeComponent();
 			DataContext = new MainViewModel(new PanoramioService());
-			ViewModel.PreviewPhotoDownloaded+=ViewModelOnPreviewPhotoDownloaded;
+			ViewModel.PreviewPhotoDownloaded += ViewModelOnPreviewPhotoDownloaded;
+			_zoomLevel = (double)Resources["ZoomLevel"];
 		}
 
 		public MainViewModel ViewModel => DataContext as MainViewModel;
@@ -59,6 +48,10 @@ namespace PanoramioViewer.App
 
 		private void MapControlOnMapTapped(MapControl sender, MapInputEventArgs args)
 		{
+			//Skip Event from MapElementClick
+			if (ViewModel.MapClickPoint == args.Position)
+				return;
+
 			MapControl.MapElements.Clear();
 			var mapElement = new MapIcon
 			{
@@ -70,9 +63,14 @@ namespace PanoramioViewer.App
 				Title = $"Lat {args.Location.Position.Latitude}\nLong {args.Location.Position.Longitude}",
 				NormalizedAnchorPoint = new Point(0.5, 1.0),
 				Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/pin_red.png")),
-				ZIndex = int.MaxValue
+				ZIndex = int.MaxValue,
 			};
 			MapControl.MapElements.Add(mapElement);
+			if (MapControl.ZoomLevel < _zoomLevel)
+			{
+				(Resources["ZoomStoryboard"] as Storyboard).Begin();
+				MapControl.Center = mapElement.Location;
+			}
 		}
 
 		private void ViewModelOnPreviewPhotoDownloaded(object sender, GeopositionArgs args)
@@ -84,7 +82,6 @@ namespace PanoramioViewer.App
 					Latitude = args.Latitude,
 					Longitude = args.Longitude
 				}),
-				//Title = $"Lat {args.Latitude}\nLong {args.Longitude}",
 				NormalizedAnchorPoint = new Point(0.5, 1.0),
 				Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/pin_green_2.png"))
 			};

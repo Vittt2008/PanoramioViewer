@@ -39,7 +39,7 @@ namespace PanoramioViewer.App.Control
 			get { return GetValue(ViewModelProperty) as PreviewPhotoViewModel; }
 			set { SetValue(ViewModelProperty, value); }
 		}
-		
+
 		/*public PreviewPhotoViewModel ViewModel
 		{
 			get { return DataContext as PreviewPhotoViewModel; }

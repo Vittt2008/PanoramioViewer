@@ -12,6 +12,18 @@
 	mc:Ignorable="d"
 	x:Name="Page">
 
+	<Page.Resources>
+		<x:Double x:Key="ZoomLevel">8</x:Double>
+		<Storyboard x:Key="ZoomStoryboard">
+			<DoubleAnimation 
+				Storyboard.TargetName="MapControl" 
+				Storyboard.TargetProperty="ZoomLevel"
+				EnableDependentAnimation="True"
+				To="{StaticResource ZoomLevel}" 
+				Duration="0:0:3"></DoubleAnimation>
+		</Storyboard>
+	</Page.Resources>
+
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="1*"></ColumnDefinition>
@@ -28,16 +40,13 @@
 				<core:EventTriggerBehavior EventName="MapTapped">
 					<core:InvokeCommandAction Command="{Binding ElementName=Page, Path=ViewModel.OnMapClickCommand}"></core:InvokeCommandAction>
 				</core:EventTriggerBehavior>
+				<core:EventTriggerBehavior EventName="MapElementClick">
+					<core:InvokeCommandAction Command="{Binding ElementName=Page, Path=ViewModel.OnMapElementClick}"></core:InvokeCommandAction>
+				</core:EventTriggerBehavior>
 			</interactivity:Interaction.Behaviors>
 		</Maps:MapControl>
 
 		<GridView x:Name="PhotoGridView" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ElementName=Page, Path=ViewModel.Images}" IsItemClickEnabled="True">
-			<!--ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollMode="Disabled"
-			<GridView.ItemsPanel>
-				<ItemsPanelTemplate>
-					<VirtualizingStackPanel Orientation="Horizontal"></VirtualizingStackPanel>
-				</ItemsPanelTemplate>
-			</GridView.ItemsPanel>-->
 			<interactivity:Interaction.Behaviors>
 				<core:EventTriggerBehavior EventName="ItemClick">
 					<core:InvokeCommandAction Command="{Binding ElementName=Page, Path=ViewModel.OnItemClick}"></core:InvokeCommandAction>
@@ -45,7 +54,7 @@
 			</interactivity:Interaction.Behaviors>
 			<GridView.ItemTemplate>
 				<DataTemplate>
-					<Grid Width="384" MinHeight="288">
+					<Grid Width="300" MinHeight="225">
 						<Grid.Background>
 							<ImageBrush ImageSource="{Binding Image}" Stretch="UniformToFill"></ImageBrush>
 						</Grid.Background>
