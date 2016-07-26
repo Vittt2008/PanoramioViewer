@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace PanoramioViewer.App.ViewModels
 		private bool _isCancel;
 		private int _from;
 		private string _imageCount = "In Progress...";
+
+		public event EventHandler<GeopositionArgs> PreviewPhotoDownloaded;
 
 		public bool IsLoading { get; private set; }
 		public bool HasMoreItems { get; private set; }
@@ -82,6 +85,7 @@ namespace PanoramioViewer.App.ViewModels
 					RemoveLoadingViewModel();
 
 				Add(new PhotoViewModel(photo));
+				OnPreviewPhotoDownloaded(new GeopositionArgs(photo.Lat, photo.Long));
 			}
 
 			if (data.HasMore)
@@ -122,6 +126,11 @@ namespace PanoramioViewer.App.ViewModels
 			if (data.HasMore)
 				return data.Count.ToString();
 			return imageTaskCount.ToString();
+		}
+
+		protected virtual void OnPreviewPhotoDownloaded(GeopositionArgs e)
+		{
+			PreviewPhotoDownloaded?.Invoke(this, e);
 		}
 	}
 }

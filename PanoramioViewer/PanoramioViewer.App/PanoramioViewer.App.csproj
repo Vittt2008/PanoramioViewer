@@ -108,10 +108,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
+    <Compile Include="ViewModels\GeopositionArgs.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PhotoViewModel.cs" />
     <Compile Include="ViewModels\PhotoViewModelCollection.cs" />
-    <Compile Include="ViewModels\PreviewPhotoViewModel.cs" />
+    <Compile Include="PreviewPhotoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -120,6 +121,11 @@
     <None Include="PanoramioViewer.App_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\pin.png" />
+    <Content Include="Assets\pin_green.png" />
+    <Content Include="Assets\pin_green_2.png" />
+    <Content Include="Assets\pin_red.png" />
+    <Content Include="Assets\pin_red_2.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

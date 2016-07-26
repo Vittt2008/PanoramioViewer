@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace PanoramioViewer.App.ViewModels
 		}
 
 		public IPanoramioService PanoramioService => _panoramioService;
+
+		public event EventHandler<GeopositionArgs> PreviewPhotoDownloaded;
 
 		public PhotoViewModelCollection Images
 		{
@@ -102,8 +105,15 @@ namespace PanoramioViewer.App.ViewModels
 			Lat = mapArgs.Location.Position.Latitude;
 			Long = mapArgs.Location.Position.Longitude;
 
-			Images?.CancelLoadMoreItemsOperation();
+			if (Images != null)
+			{
+				Images.CancelLoadMoreItemsOperation();
+				Images.PreviewPhotoDownloaded -= ImagesOnPreviewPhotoDownloaded;
+			}
+
 			Images = new PhotoViewModelCollection(mapArgs.Location.Position, _panoramioService);
+			Images.PreviewPhotoDownloaded += ImagesOnPreviewPhotoDownloaded;
+
 			await Images.LoadDataAsync();
 		});
 
@@ -116,5 +126,15 @@ namespace PanoramioViewer.App.ViewModels
 			PreviewPhoto = new PreviewPhotoViewModel(photoViewModel, PanoramioService);
 			IsPreviewOpen = true;
 		});
+
+		private void ImagesOnPreviewPhotoDownloaded(object sender, GeopositionArgs args)
+		{
+			OnPreviewPhotoDownloaded(args);
+		}
+
+		protected virtual void OnPreviewPhotoDownloaded(GeopositionArgs e)
+		{
+			PreviewPhotoDownloaded?.Invoke(this, e);
+		}
 	}
 }

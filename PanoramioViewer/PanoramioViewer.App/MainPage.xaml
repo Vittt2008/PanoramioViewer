@@ -23,7 +23,7 @@
 			<RowDefinition></RowDefinition>
 		</Grid.RowDefinitions>
 
-		<Maps:MapControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+		<Maps:MapControl x:Name="MapControl" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" MapTapped="MapControlOnMapTapped">
 			<interactivity:Interaction.Behaviors>
 				<core:EventTriggerBehavior EventName="MapTapped">
 					<core:InvokeCommandAction Command="{Binding ElementName=Page, Path=ViewModel.OnMapClickCommand}"></core:InvokeCommandAction>

@@ -4,13 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
@@ -33,6 +36,7 @@ namespace PanoramioViewer.App
 		{
 			InitializeComponent();
 			DataContext = new MainViewModel(new PanoramioService());
+			ViewModel.PreviewPhotoDownloaded+=ViewModelOnPreviewPhotoDownloaded;
 		}
 
 		public MainViewModel ViewModel => DataContext as MainViewModel;
@@ -51,6 +55,40 @@ namespace PanoramioViewer.App
 				PreviewPopup.HorizontalOffset = newHorizontalOffset;
 				PreviewPopup.VerticalOffset = newVerticalOffset;
 			}
+		}
+
+		private void MapControlOnMapTapped(MapControl sender, MapInputEventArgs args)
+		{
+			MapControl.MapElements.Clear();
+			var mapElement = new MapIcon
+			{
+				Location = new Geopoint(new BasicGeoposition
+				{
+					Latitude = args.Location.Position.Latitude,
+					Longitude = args.Location.Position.Longitude
+				}),
+				Title = $"Lat {args.Location.Position.Latitude}\nLong {args.Location.Position.Longitude}",
+				NormalizedAnchorPoint = new Point(0.5, 1.0),
+				Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/pin_red.png")),
+				ZIndex = int.MaxValue
+			};
+			MapControl.MapElements.Add(mapElement);
+		}
+
+		private void ViewModelOnPreviewPhotoDownloaded(object sender, GeopositionArgs args)
+		{
+			var mapElement = new MapIcon
+			{
+				Location = new Geopoint(new BasicGeoposition
+				{
+					Latitude = args.Latitude,
+					Longitude = args.Longitude
+				}),
+				//Title = $"Lat {args.Latitude}\nLong {args.Longitude}",
+				NormalizedAnchorPoint = new Point(0.5, 1.0),
+				Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/pin_green_2.png"))
+			};
+			MapControl.MapElements.Add(mapElement);
 		}
 	}
 }

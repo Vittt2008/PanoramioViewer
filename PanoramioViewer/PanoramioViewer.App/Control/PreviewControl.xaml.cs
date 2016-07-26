@@ -1,5 +1,4 @@
-﻿using Windows.Storage.Streams;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using PanoramioViewer.App.ViewModels;
 
@@ -9,7 +8,7 @@ namespace PanoramioViewer.App.Control
 {
 	public sealed partial class PreviewControl : UserControl
 	{
-		private const int ZoomLevel = 8;
+		private const int ZoomLevel = 10;
 
 		public static DependencyProperty ViewModelProperty =
 			DependencyProperty.Register(
@@ -17,8 +16,6 @@ namespace PanoramioViewer.App.Control
 				typeof(PreviewPhotoViewModel),
 				typeof(PreviewControl),
 				new PropertyMetadata(null, PropertyChangedCallback));
-
-		private RandomAccessStreamReference _streamReference;
 
 		private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
 		{

@@ -139,6 +139,7 @@ namespace PanoramioViewer.App.ViewModels
 				Latitude = Lat,
 				Longitude = Long
 			}),
+			Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/pin_green.png")),
 			Title = $"Lat {Lat}\nLong {Long}",
 			NormalizedAnchorPoint = new Point(0.5, 1.0)
 		};
