@@ -39,18 +39,5 @@ namespace PanoramioViewer.App.Control
 			get { return GetValue(ViewModelProperty) as PreviewPhotoViewModel; }
 			set { SetValue(ViewModelProperty, value); }
 		}
-
-		/*public PreviewPhotoViewModel ViewModel
-		{
-			get { return DataContext as PreviewPhotoViewModel; }
-			set
-			{
-				DataContext = value;
-				MapControl.MapElements.Clear();
-				MapControl.MapElements.Add(ViewModel.MapElement);
-				MapControl.ZoomLevel = ZoomLevel;
-				MapControl.Center = ViewModel.MapElement.Location;
-			}
-		}*/
 	}
 }
